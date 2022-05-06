@@ -2,10 +2,10 @@ from watermark import WaterMarker
 
 ARIAL_PATH = r'C:/Windows/Fonts/Arial.ttf'
 CALIBRI_PATH = r'C:/Windows/Fonts/Calibri.ttf'
-IMG = r'funky.jpg'
+IMG = r'cat.jpg'
 
-ayo = WaterMarker(IMG, u"solomon.rosenfeld@gmail.com", CALIBRI_PATH, 25)
-
+ayo = WaterMarker(IMG, u"scooby doo", CALIBRI_PATH, opacity=25, mode=True, output_file="output.jpg",
+                  file_format='JPEG')
 
 
 # TODO (Functionality)
