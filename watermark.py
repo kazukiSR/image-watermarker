@@ -4,14 +4,15 @@ import math
 
 class WaterMarker:
 
-    def __init__(self, img_file: str, text: str, font_path: str, opacity: int, mode: bool, output_file, file_format,
-                 font_ratio=1.5, diagonal_percentage=0.8, **kwargs):
-        self.font_ratio = font_ratio  # Size ratio of font
-        self.diagonal_percentage = diagonal_percentage  # Percentage of the diagonal line length
+    def __init__(self, img_file: str, text: str, font_path: str, opacity: int, mode: bool,
+                 output_file, file_format, angle=None, font_ratio=1.5, diagonal_percentage=0.8, **kwargs):
         self.text = text  # Text to be become the watermark
-        self.text_len = len(self.text)
         self.font_path = font_path
         self.opacity = int(256 * (opacity * 0.01))  # Passed opacity is 0-100, representing opacity percentage
+        self.angle = angle  # If angle is left blank, angle will be automatically calculated based on the image
+        self.font_ratio = font_ratio  # Size ratio of font
+        self.diagonal_percentage = diagonal_percentage  # Percentage of the diagonal line length
+        self.text_len = len(self.text)
         # Base image to be used
         self.baseImg = Image.open(img_file).convert('RGBA')
         # Img dimensions
@@ -74,8 +75,9 @@ class WaterMarker:
         img_txt = Image.new('RGBA', size)  # RGBA mode is required to maintain opacity
         draw_text = ImageDraw.Draw(img_txt)
         draw_text.text((0, 0), self.text, font=font, fill=(255, 255, 255, self.opacity))
-        angle = math.degrees(math.atan(self.base_height / self.base_width))
-        img_txt = img_txt.rotate(angle, expand=True)
+        if not self.angle:
+            self.angle = math.degrees(math.atan(self.base_height / self.base_width))
+        img_txt = img_txt.rotate(self.angle, expand=True)
         return img_txt
 
     def save_file(self):
